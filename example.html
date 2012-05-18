@@ -3,11 +3,13 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript" src="lcs.js"></script>
     <style type="text/css">
-      #result { border: solid 1px black; border-collapse: collapse; }
+      #result { border: solid 1px black; border-collapse: collapse; min-width: 200px; margin-right: 20px;}
       #result td { border: solid 1px black; padding: 5px; }
+	  .left { float: left; }
     </style>
   </head>
   <body>
+    <h1>Javascript LCS error detection example</h1>
     <form>
       <label for="reference">reference</label>
       <input name="reference" type="text" value="012012012"/>
@@ -16,8 +18,14 @@
       <input value="ok" type="button"/>
     </form>
     <div>
-      <label>Result:</label>
-      <table id="result"></table>
+	  <div class="left">
+        <h2>Result:</h2>
+        <table id="result"></table>
+	  </div>
+	  <div class="left">
+	    <h2>Message:</h2>
+	    <div id="message"></div>
+      </div>
     </div>
     <script type="text/javascript">
       $(function() {
@@ -49,8 +57,17 @@
             }
           }
 
-          // Highlight the path
+          // Highlight the path and display the messages
+		  $('#message').empty();
           lcs.run(result, 0, 0, function(i, j) {
+		    // Display the message.
+		    if (result[i][j].status == lcs.DELETION) {
+			  $('#message').append('<p>Missing a caracter at index ' + j + '.</p>');
+            } else if (result[i][j].status == lcs.INSERTION) {
+              $('#message').append('<p>Extra caracter at index ' + j + '.</p>');
+            }
+
+		    // Highlight the path
             $(table.find('tr').get(i + 1)).find('td').get(j + 1).style.setProperty('color', 'red');
           });
         });
