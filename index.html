@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="lcs.js"></script>
+    <style type="text/css">
+      #result { border: solid 1px black; border-collapse: collapse; }
+      #result td { border: solid 1px black; padding: 5px; }
+    </style>
+  </head>
+  <body>
+    <form>
+      <label for="reference">reference</label>
+      <input name="reference" type="text" value="012012012"/>
+      <label for="input">input</label>
+      <input name="input" type="text" value="0102012012"/>
+      <input value="ok" type="button"/>
+    </form>
+    <div>
+      <label>Result:</label>
+      <table id="result"></table>
+    </div>
+    <script type="text/javascript">
+      $(function() {
+        $('form input[type="button"]').click(function() {
+          // Build the matrix.
+          var reference = this.form.reference.value;
+          var input = this.form.input.value;
+          var result = lcs.compare(reference, input);
+
+          // Get the line and the column of the matrix
+          var line_count = result.length;
+          var column_count = 0;
+          result.forEach(function(line) { column_count = Math.max(line.length, column_count); });
+
+          // Display the matrix: display the first line
+          var table = $('#result').empty();
+          var tr = $('<tr><td/></tr>').appendTo(table);
+          for (var c in reference) {
+            tr.append('<td>' + reference[c] + '</td>');
+          }
+          tr.append('<td/>');
+
+          // Display the matrix: display the result
+          for(var i = 0; i < line_count; i++) {
+            var tr = $('<tr/>').appendTo(table);
+            tr.append('<td>' + (input[i] || '') + '</td>');
+            for(var j = 0; j < column_count; j++) {
+              tr.append('<td>' + result[i][j].value + '</td>');
+            }
+          }
+
+          // Highlight the path
+          lcs.run(result, 0, 0, function(i, j) {
+            $(table.find('tr').get(i + 1)).find('td').get(j + 1).style.setProperty('color', 'red');
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
