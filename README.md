@@ -30,6 +30,3 @@ Open `example.html` in your browser, enter a string in reference and input field
 
 ![Example](https://github.com/sp4ce/javascript-lcs/raw/master/example.png)
 
-## License
-
-Apache 2.0
